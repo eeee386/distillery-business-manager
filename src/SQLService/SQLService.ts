@@ -1,17 +1,23 @@
 import {Distillation} from '../models/Distillation/Distillation'
  
 export class SQLService {
-
-    db: any;
+    dbName: string = 'Distillation';
+    db: IDBDatabase;
+    databaseOpenRequest: IDBOpenDBRequest;
 
     constructor(){
-        this.db= window.indexedDB.open('DistilleryDatabase');
-        this.db.onsuccess = () => {
+        this.databaseOpenRequest= window.indexedDB.open('DistilleryDatabase', 1);
+        this.databaseOpenRequest.onsuccess = () => {
             console.log('Database initialized');
+            if(!this.db.objectStoreNames.contains(this.dbName)){
+                this.db.createObjectStore(this.dbName);
+            }
+            displayData();   
         }
-        this.db.onerror = () => {
+        this.databaseOpenRequest.onerror = () => {
             console.log('Database failed to connect');
         }
+        this.db = this.databaseOpenRequest.result;
     }
 
     findAll = async () => {
