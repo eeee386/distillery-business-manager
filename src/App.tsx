@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import {HashRouter as Router, Route} from 'react-router-dom';
+import {connect} from 'react-redux';
+import TableManager from './components/Tables/TableManager';
+import Search from './components/Search/Search';
+import { ActionFactory, Action } from './ReduxStoreHandlers/actionFactory';
+import { tableSagaTypes } from './models/Types/TableTypes/TableTypes';
+import { ConnectedComponentProps } from './models/ConnectTypes/ConnectTypes';
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component<ConnectedComponentProps> {
+  constructor(props: ConnectedComponentProps) {
+    super(props);
+    props.connectSQL();
+  }
+
+  componentWillUnmount() {
+    this.props.disconnectSQL();
+  }
+
+  render() {
+    return (
+      <Router>
+        <div>
+          <Route exact path='/' component={TableManager} />
+          <Route exact path='/search' component={Search} />
+        </div>
+      </Router>
+    );
+  }
 }
 
-export default App;
+const matchDispatchToProps = (dispatch: React.Dispatch<Action>) => ({
+  connectSQL: () => dispatch(ActionFactory(tableSagaTypes.CONNECT_SQL)),
+  disconnectSQL: () => dispatch(ActionFactory(tableSagaTypes.DISCONNECT_SQL)) 
+});
+
+export default connect(null, matchDispatchToProps) (App);
