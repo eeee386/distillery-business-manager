@@ -1,27 +1,38 @@
 import {Distillation} from '../models/Distillation/Distillation'
+import * as JsStore from 'jsstore'
+import _ from 'lodash';
  
 export class SQLService {
-    dbName: string = 'Distillation';
-    db: IDBDatabase;
-    databaseOpenRequest: IDBOpenDBRequest;
 
-    constructor(){
-        this.databaseOpenRequest= window.indexedDB.open('DistilleryDatabase', 1);
-        this.databaseOpenRequest.onsuccess = () => {
-            console.log('Database initialized');
-            if(!this.db.objectStoreNames.contains(this.dbName)){
-                this.db.createObjectStore(this.dbName);
+    connection: any;
+    db: any;
+    dbName: string = "Distillation"
+    tableName: string = "DistillationData";
+    async initDB(): Promise<void>{
+        console.log('JSStore:', JsStore);
+        this.connection = new JsStore.Instance();
+        const tableDistillation = {
+            name: this.tableName,
+            columns: {
+                _id: {primaryKey: true, dataType: "string"},
+                name: {notNull: true, dataType: "string"},
+                taxID: {notNull: true, dataType: "string"},
+                date: {notNull: true, dataType: "string"},
+                address: {notNull: true, dataType: "string"},
+                originID: {notNull: true, dataType: "string"},
+                HLF: {notNull: true, dataType: "number"},
+                weightInKilograms: {notNull: true, dataType: "number"},               
             }
-            displayData();   
         }
-        this.databaseOpenRequest.onerror = () => {
-            console.log('Database failed to connect');
-        }
-        this.db = this.databaseOpenRequest.result;
+        this.db = {
+            name: this.dbName,
+            tables: [tableDistillation]
+      }
+      await this.connection.initDb(this.db);
     }
 
     findAll = async () => {
-        return await this.db.find();
+        return await this.connection.select({from: this.tableName});
     }
 
     findAllByName = async (nameToFind: string): Promise<Distillation[]> => {
@@ -32,35 +43,33 @@ export class SQLService {
     }
 
     sumAllHLFByName = async (nameToFind: string): Promise<number> => {
-        const dist: any[] = await this.db.find({name: nameToFind});
-        return dist.reduce((accumulator, item: any) => accumulator + item.HLF, 0);
+        return await this.connection.select({from: this.tableName, where: {name: nameToFind}, aggregate: {sum: 'HLF'}});
     }
 
     sumAllHLFByTaxID = async (taxIDToFind: string): Promise<number> => {
-        const dist: any[] = await this.db.find({taxID: taxIDToFind});
-        return dist.reduce((accumulator, item: any) => accumulator + item.HLF, 0);
+        return await this.connection.select({from: this.tableName, where: {taxID: taxIDToFind}, aggregate: {sum: 'HLF'}});
     }
 
     sumAllWeightByName = async (nameToFind: string): Promise<number> => {
-        const dist: any[] = await this.db.find({name: nameToFind});
-        return dist.reduce((accumulator, item: any) => accumulator + item.weightInKilograms, 0);
+        return await this.connection.select({from: this.tableName, where: {name: nameToFind}, aggregate: {sum: 'weightInKilograms'}});
     }
 
     sumAllWeightByTaxID = async (taxIDToFind: string): Promise<number> => {
-        const dist: any[] = await this.db.find({taxID: taxIDToFind});
-        return dist.reduce((accumulator, item: any) => accumulator + item.weightInKilograms, 0);
+        return await this.connection.select({from: this.tableName, where: {taxID: taxIDToFind}, aggregate: {sum: 'weightInKilograms'}});
     }
 
     createNewDistillation = async (modelObject: Distillation): Promise<Distillation> => {
-        await this.db.insert(modelObject);
-        return Distillation.fromSQLObject(await this.db.find(modelObject._id));
+        await this.connection.insert({from: this.tableName, value:modelObject.toSQLObject()});
+        return Distillation.fromSQLObject(await this.connection.find({from: this.tableName, value: modelObject._id}));
     }
 
     updateDistillation = async (modelObject: Distillation): Promise<Distillation> => {
-        const id = modelObject._id;
-        delete modelObject._id;
-        await this.db.update(id, modelObject);
-        return Distillation.fromSQLObject(await this.db.find(modelObject._id));
+        await this.connection.update({ 
+            in: this.tableName,
+          set: Object.assign({}, _.omit(Distillation, '_id')),
+          where: {_id: modelObject._id,}
+      });
+      return Distillation.fromSQLObject(await this.connection.find({from: this.tableName, value: modelObject._id}));
     }
 
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {

@@ -9,7 +9,8 @@ const sqlService = new SQLService();
 function* connectSql(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.CONNECTION_STARTED));
     try {
-        console.log('sqlService: ', sqlService);
+        console.log("SQLService: ", SQLService);
+        yield call(sqlService.initDB);
         yield put(ActionFactory(tableTypes.CONNECTION_COMPLETED));
         // console.log('fetchTableCalled');
         // yield put(ActionFactory(tableSagaTypes.FETCH_TABLE));
