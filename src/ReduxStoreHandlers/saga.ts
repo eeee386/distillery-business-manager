@@ -10,7 +10,6 @@ function* connectSql(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.CONNECTION_STARTED));
     try {
         console.log("SQLService: ", SQLService);
-        yield call(sqlService.initDB);
         yield put(ActionFactory(tableTypes.CONNECTION_COMPLETED));
         // console.log('fetchTableCalled');
         // yield put(ActionFactory(tableSagaTypes.FETCH_TABLE));
@@ -57,7 +56,10 @@ function* createDistillation(action: Action): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.ADD_NEW_STARTED));
     try {
         const payloadToSend = !!action.payload && !!tableSagaTypes.ADD_NEW.payloadName && action.payload[tableSagaTypes.ADD_NEW.payloadName];
-        const newDist = yield call(() => sqlService.createNewDistillation(payloadToSend));
+        const newDist = yield call(() => {
+            console.log(payloadToSend);
+            return sqlService.createNewDistillation(payloadToSend)
+        });
         yield put(ActionFactory(tableTypes.ADD_NEW_COMPLETED, newDist));
     } catch (error) {
         yield put(ActionFactory(tableTypes.ADD_NEW_FAILED, error));

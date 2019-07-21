@@ -1,78 +1,59 @@
 import {Distillation} from '../models/Distillation/Distillation'
-import * as JsStore from 'jsstore'
+import PouchDB from 'pouchdb-browser';
 import _ from 'lodash';
  
 export class SQLService {
 
-    connection: any;
     db: any;
-    dbName: string = "Distillation"
-    tableName: string = "DistillationData";
-    async initDB(): Promise<void>{
-        console.log('JSStore:', JsStore);
-        this.connection = new JsStore.Instance();
-        const tableDistillation = {
-            name: this.tableName,
-            columns: {
-                _id: {primaryKey: true, dataType: "string"},
-                name: {notNull: true, dataType: "string"},
-                taxID: {notNull: true, dataType: "string"},
-                date: {notNull: true, dataType: "string"},
-                address: {notNull: true, dataType: "string"},
-                originID: {notNull: true, dataType: "string"},
-                HLF: {notNull: true, dataType: "number"},
-                weightInKilograms: {notNull: true, dataType: "number"},               
-            }
-        }
-        this.db = {
-            name: this.dbName,
-            tables: [tableDistillation]
-      }
-      await this.connection.initDb(this.db);
+
+    constructor(){
+        this.db = new PouchDB('Distillation');
     }
 
     findAll = async () => {
-        return await this.connection.select({from: this.tableName});
+        return Distillation.fromSQLObjects(await this.db.allDocs());
     }
 
     findAllByName = async (nameToFind: string): Promise<Distillation[]> => {
-        return Distillation.fromSQLObjects(await this.db.find({ name: nameToFind}));
+        return Distillation.fromSQLObjects(await this.db.find({selector: { name: nameToFind}}));
     }
     findAllByTaxID = async (taxIDToFind: string): Promise<Distillation[]> => {
-        return Distillation.fromSQLObjects(await this.db.find({taxID: taxIDToFind}));
+        return Distillation.fromSQLObjects(await this.db.find({selector: { taxID: taxIDToFind}}));
     }
 
     sumAllHLFByName = async (nameToFind: string): Promise<number> => {
-        return await this.connection.select({from: this.tableName, where: {name: nameToFind}, aggregate: {sum: 'HLF'}});
+        const res = await this.db.find({selector: { name: nameToFind}});
+        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.HLF, 0)
     }
 
     sumAllHLFByTaxID = async (taxIDToFind: string): Promise<number> => {
-        return await this.connection.select({from: this.tableName, where: {taxID: taxIDToFind}, aggregate: {sum: 'HLF'}});
+        const res = await this.db.find({selector: { taxID: taxIDToFind }});
+        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.HLF, 0)
     }
 
     sumAllWeightByName = async (nameToFind: string): Promise<number> => {
-        return await this.connection.select({from: this.tableName, where: {name: nameToFind}, aggregate: {sum: 'weightInKilograms'}});
+        const res = await this.db.find({selector: { name: nameToFind}});
+        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.weightInKilograms, 0)
     }
 
     sumAllWeightByTaxID = async (taxIDToFind: string): Promise<number> => {
-        return await this.connection.select({from: this.tableName, where: {taxID: taxIDToFind}, aggregate: {sum: 'weightInKilograms'}});
+        const res = await this.db.find({selector: { taxID: taxIDToFind }});
+        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.weightInKilograms, 0);
     }
 
     createNewDistillation = async (modelObject: Distillation): Promise<Distillation> => {
-        await this.connection.insert({from: this.tableName, value:modelObject.toSQLObject()});
-        return Distillation.fromSQLObject(await this.connection.find({from: this.tableName, value: modelObject._id}));
+        console.log('modelObject: ', modelObject);
+        return Distillation.fromSQLObject(await this.db.post(modelObject.toSQLObject()));
     }
 
     updateDistillation = async (modelObject: Distillation): Promise<Distillation> => {
-        await this.connection.update({ 
-            in: this.tableName,
-          set: Object.assign({}, _.omit(Distillation, '_id')),
-          where: {_id: modelObject._id,}
-      });
-      return Distillation.fromSQLObject(await this.connection.find({from: this.tableName, value: modelObject._id}));
+        const doc = await this.db.get(modelObject._id);
+        await this.db.remove(doc);
+        return Distillation.fromSQLObject(await this.db.post(modelObject.toSQLObject()));
     }
 
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {
-        return await this.db.remove({_id: modelObject._id});
+        const doc = await this.db.get(modelObject._id);
+        return await this.db.remove(doc);
     }
 }
