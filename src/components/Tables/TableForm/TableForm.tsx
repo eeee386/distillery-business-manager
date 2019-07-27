@@ -14,7 +14,6 @@ const TableForm = (props: any) =>  {
       </div>
     )
   }
-  console.log(props.handleSubmit);
 
     return (
       <Form onSubmit={props.handleSubmit}>

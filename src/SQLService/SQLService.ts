@@ -14,7 +14,6 @@ export class SQLService {
         const map = await Promise.all(result.rows.map(async (res: any) => {
             return await this.db.get(res.id);
         }));
-        console.log('map: ', map);
         return Distillation.fromSQLObjects(map);
     }
 
