@@ -1,6 +1,5 @@
 import {Distillation} from '../models/Distillation/Distillation'
 import PouchDB from 'pouchdb-browser';
-import _ from 'lodash';
  
 export class SQLService {
 
@@ -11,7 +10,12 @@ export class SQLService {
     }
 
     findAll = async () => {
-        return Distillation.fromSQLObjects(await this.db.allDocs());
+        const result = await this.db.allDocs() || [];
+        const map = await Promise.all(result.rows.map(async (res: any) => {
+            return await this.db.get(res.id);
+        }));
+        console.log('map: ', map);
+        return Distillation.fromSQLObjects(map);
     }
 
     findAllByName = async (nameToFind: string): Promise<Distillation[]> => {
@@ -41,9 +45,10 @@ export class SQLService {
         return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.weightInKilograms, 0);
     }
 
-    createNewDistillation = async (modelObject: Distillation): Promise<Distillation> => {
+    createNewDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
         console.log('modelObject: ', modelObject);
-        return Distillation.fromSQLObject(await this.db.post(modelObject.toSQLObject()));
+        const result = await this.db.post(modelObject);
+        return await this.db.get(result.id)
     }
 
     updateDistillation = async (modelObject: Distillation): Promise<Distillation> => {

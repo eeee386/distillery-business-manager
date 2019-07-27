@@ -6,25 +6,26 @@ const TABLE_FORM_NAME = 'TABLE_FORM';
 
 const TableForm = (props: any) =>  {
 
-  const renderFormInput = (name: string, type: string) => {
+  const renderFormInput = (name: string, formName: string) => {
     return (
       <div>
         <label>{name}</label>
-        <input type={type} />
+        <Field name={formName} component="input" type="text" />
       </div>
     )
   }
+  console.log(props.handleSubmit);
 
     return (
       <Form onSubmit={props.handleSubmit}>
         <div className={"root"}>        
-          <Field name="date" component={() => renderFormInput("Dátum", "text")} />
-          <Field name="name" component={() => renderFormInput("Név", "text")} />
-          <Field name="address" component={() => renderFormInput("Lakcím", "text")} />
-          <Field name="taxID" component={() => renderFormInput("AdóSzám", "text")} />
-          <Field name="originID" component={() => renderFormInput("Származási Igazolvány Szám", "text")} />
-          <Field name="HLF" component={() => renderFormInput("Hektoliterfok", "text")} />
-          <Field name="weightInKilograms" component={() => renderFormInput("Tömeg", "text")} />
+          {renderFormInput('Dátum', 'date')}
+          {renderFormInput('Név', 'name')}
+          {renderFormInput('Lakcím', 'address')}
+          {renderFormInput('AdóSzám', 'taxID')}
+          {renderFormInput('Származási Igazolvány Szám', 'originID')}
+          {renderFormInput('Hektoliterfok', 'HLF')}
+          {renderFormInput('Tömeg', 'weightInKilograms')}
           <button onClick={props.handleSubmit}>Küldés</button>
         </div>
       </Form>

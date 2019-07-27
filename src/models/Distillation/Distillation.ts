@@ -29,17 +29,18 @@ export class Distillation {
             this.weightInKilograms = weightInKilograms;
     }
     
-    toSQLObject(): string {
-        return JSON.stringify(Object.assign({}, this));
+    toSQLObject(): {[key: string]: any} {
+        return Object.assign({}, this);
     }
 
-    static fromSQLObject(modelObject: string): Distillation {
-        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms} = JSON.parse(modelObject)
+    static fromSQLObject(modelObject: {[key: string]: any}): Distillation {
+        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms} = modelObject.rows;
         return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id)
     }
 
-    static fromSQLObjects(modelObjects: string): Distillation[] {
-        const models: any[] = JSON.parse(modelObjects);
+    static fromSQLObjects(modelObjects: any[]): Distillation[] {
+
+        const models: any[] = modelObjects
         return models.map((item: any) => {
             const {_id, date, address, name, taxID, originID, HLF, weightInKilograms} = item;
             return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id)
