@@ -36,9 +36,7 @@ function* watchDisconnectSql(): IterableIterator<Effect> {
 function* fetchDistillations(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.FETCH_TABLE_STARTED));
     try {
-        console.log('sqlService: ', sqlService)
         const distillations = yield call(sqlService.findAll);
-        console.log('distillations: ', distillations);
         yield put(ActionFactory(tableTypes.FETCH_TABLE_COMPLETED, distillations));
     } catch (error) {
         yield put(ActionFactory(tableTypes.FETCH_TABLE_FAILED, error));
@@ -55,7 +53,6 @@ function* createDistillation(action: Action): IterableIterator<Effect> {
         console.log('action: ', action);
         const payloadToSend = !!action.payload && !!tableSagaTypes.ADD_NEW.payloadName && action.payload[tableSagaTypes.ADD_NEW.payloadName];
         const newDist = yield call(() => {
-            console.log('payloadToSend:', payloadToSend);
             return sqlService.createNewDistillation(payloadToSend)
         });
         yield put(ActionFactory(tableTypes.ADD_NEW_COMPLETED, newDist));

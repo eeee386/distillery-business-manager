@@ -12,50 +12,46 @@ export class SQLService {
     }
 
     findAll = async () => {
-        const result = await this.db.allDocs() || [];
-        const map = await Promise.all(result.rows.map(async (res: any) => {
-            return await this.db.get(res.id);
-        }));
-        return Distillation.fromSQLObjects(map);
+        const res = await this.db.find({selector: {}});
+        return Distillation.fromSQLObjects(res.docs);
     }
 
     findAllByName = async (nameToFind: string): Promise<Distillation[]> => {
-        return Distillation.fromSQLObjects(await this.db.find({selector: { name: nameToFind}}));
+        const {docs} = await this.db.find({selector: { name: nameToFind}});
+        return Distillation.fromSQLObjects(docs);
     }
     findAllByTaxID = async (taxIDToFind: string): Promise<Distillation[]> => {
-        return Distillation.fromSQLObjects(await this.db.find({selector: { taxID: taxIDToFind}}));
+        const {docs} = await this.db.find({selector: { taxID: taxIDToFind}});
+        return Distillation.fromSQLObjects(docs);
     }
 
     sumAllHLFByName = async (nameToFind: string): Promise<number> => {
         const res = await this.db.find({selector: { name: nameToFind}});
-        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.HLF, 0)
+        return res.docs.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.HLF, 0)
     }
 
     sumAllHLFByTaxID = async (taxIDToFind: string): Promise<number> => {
         const res = await this.db.find({selector: { taxID: taxIDToFind }});
-        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.HLF, 0)
+        return res.docs.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.HLF, 0)
     }
 
     sumAllWeightByName = async (nameToFind: string): Promise<number> => {
         const res = await this.db.find({selector: { name: nameToFind}});
-        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.weightInKilograms, 0)
+        return res.docs.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.weightInKilograms, 0)
     }
 
     sumAllWeightByTaxID = async (taxIDToFind: string): Promise<number> => {
         const res = await this.db.find({selector: { taxID: taxIDToFind }});
-        return res.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.weightInKilograms, 0);
+        return res.docs.reduce((acc: number, curr: {[key: string]: any}) => acc + curr.weightInKilograms, 0);
     }
 
     createNewDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
-        console.log('modelObject: ', modelObject);
         const result = await this.db.post(modelObject);
         return await this.db.get(result.id)
     }
 
     updateDistillation = async (modelObject: Distillation): Promise<Distillation> => {
-        const doc = await this.db.get(modelObject._id);
-        await this.db.remove(doc);
-        return Distillation.fromSQLObject(await this.db.post(modelObject.toSQLObject()));
+        return Distillation.fromSQLObject(await this.db.put(modelObject.toSQLObject()));
     }
 
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {
