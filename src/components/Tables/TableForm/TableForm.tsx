@@ -1,20 +1,11 @@
 import * as React from 'react'
-import {Form, Field, reduxForm} from 'redux-form';
+import {Form, reduxForm} from 'redux-form';
 import './TableForm.scss';
+import {renderFormInput} from '../../UtilComponents/renderFormInput'
 
 const TABLE_FORM_NAME = 'TABLE_FORM';
 
 const TableForm = (props: any) =>  {
-
-  const renderFormInput = (name: string, formName: string) => {
-    return (
-      <div>
-        <label>{name}</label>
-        <Field name={formName} component="input" type="text" />
-      </div>
-    )
-  }
-
     return (
       <Form onSubmit={props.handleSubmit}>
         <div className={"root"}>        

@@ -1,13 +1,12 @@
 import * as React from 'react'
-import { ConnectedComponentProps } from '../../../models/ConnectTypes/ConnectTypes';
+import {reduxForm, Form} from 'redux-form';
 import './SearchByNameForm.scss';
+import {renderFormInput} from '../../UtilComponents/renderFormInput'
 
-class SearchByNameForm extends React.Component<ConnectedComponentProps> {
-  render() {
-    return (
-      <div>
-        FormName
-      </div>
-    );
-  }
-}
+const SearchByNameForm = (props: any) => (
+  <Form onSubmit={props.handleSubmit}>
+    {renderFormInput('Név', 'name')}
+  </Form>
+);
+
+export default reduxForm({form: 'SearchByNameForm'})(SearchByNameForm);

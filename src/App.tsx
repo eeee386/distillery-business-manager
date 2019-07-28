@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {HashRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import TableManager from './components/Tables/TableManager';
 import Search from './components/Search/Search';
@@ -19,12 +19,18 @@ class App extends React.Component<ConnectedComponentProps> {
 
   render() {
     return (
-      <Router>
+      <React.Fragment>
         <div>
-          <Route exact path='/' component={TableManager} />
-          <Route exact path='/search' component={Search} />
+          <a href={'/search'}>Keresés</a>
+          <a href={'/'}>Főzetések</a>
         </div>
-      </Router>
+        <Router>
+          <div>
+            <Route exact path='/' component={TableManager} />
+            <Route exact path='/search' component={Search} />
+          </div>
+        </Router>
+      </React.Fragment>
     );
   }
 }

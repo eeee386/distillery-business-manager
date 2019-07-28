@@ -19,7 +19,6 @@ class TableManager extends React.Component<ConnectedComponentProps> {
     console.log(table);
     return (
       <div>
-        <a href={'/search'}>Keresés</a>
         {isEmpty(table) ? "Nincsenek főzetések": <TableList table={table} />}
         <TableForm onSubmit={addNewDistillation}/>
       </div>

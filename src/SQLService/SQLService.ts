@@ -1,11 +1,13 @@
 import {Distillation} from '../models/Distillation/Distillation'
 import PouchDB from 'pouchdb-browser';
+import find from 'pouchdb-find';
  
 export class SQLService {
 
     db: any;
 
     constructor(){
+        PouchDB.plugin(find)
         this.db = new PouchDB('Distillation');
     }
 

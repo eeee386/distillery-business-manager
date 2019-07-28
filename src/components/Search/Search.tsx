@@ -4,12 +4,15 @@ import {payloadNames, searchSagaTypes} from '../../models/Types/SearchTypes/Sear
 import { ConnectedComponentProps, StateProps } from '../../models/ConnectTypes/ConnectTypes';
 import { Action, ActionFactory } from '../../ReduxStoreHandlers/actionFactory';
 import './Search.scss';
+import SearchByNameForm from './SearchByNameForm/SearchByNameForm'
+import SearchByTaxIDForm from './SearchByTaxIDForm/SearchByTaxIDForm';
 
 class Search extends React.Component<ConnectedComponentProps> {
   render() {
     return (
       <div>
-        HELLO!
+        <SearchByNameForm onSubmit={this.props.searchByName} />
+        <SearchByTaxIDForm onSubmit={this.props.searchByTaxID} />
       </div>
     );
   }
