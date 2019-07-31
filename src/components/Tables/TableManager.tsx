@@ -11,12 +11,11 @@ import { ActionFactory, Action } from '../../ReduxStoreHandlers/actionFactory';
 
 class TableManager extends React.Component<ConnectedComponentProps> {
     constructor(props: ConnectedComponentProps) {
-        super(props)
+        super(props);
         props.fetchDistillation();
     }
   render() {
     const {table, addNewDistillation} = this.props;
-    console.log(table);
     return (
       <div>
         {isEmpty(table) ? "Nincsenek főzetések": <TableList table={table} />}

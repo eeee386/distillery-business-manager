@@ -7,8 +7,15 @@ export class SQLService {
     db: any;
 
     constructor(){
-        PouchDB.plugin(find)
+        PouchDB.plugin(find);
         this.db = new PouchDB('Distillation');
+    }
+
+
+    createIndex = async () => {
+        return await this.db.createIndex({
+            index: {fields: ['name', 'taxID']}
+        });
     }
 
     findAll = async () => {
@@ -57,5 +64,9 @@ export class SQLService {
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {
         const doc = await this.db.get(modelObject._id);
         return await this.db.remove(doc);
+    }
+
+    destroyDataBase = async (): Promise<any> => {
+        await this.db.destroy('Distillation')
     }
 }
