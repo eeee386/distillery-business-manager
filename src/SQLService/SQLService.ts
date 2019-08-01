@@ -13,16 +13,16 @@ export class SQLService {
 
     findAll = async () => {
         const res = await this.db.find({selector: {}});
-        return Distillation.fromSQLObjects(res.docs);
+        return Distillation.fromObjects(res.docs);
     }
 
     findAllByName = async (nameToFind: string): Promise<Distillation[]> => {
         const {docs} = await this.db.find({selector: { name: nameToFind}});
-        return Distillation.fromSQLObjects(docs);
+        return Distillation.fromObjects(docs);
     }
     findAllByTaxID = async (taxIDToFind: string): Promise<Distillation[]> => {
         const {docs} = await this.db.find({selector: { taxID: taxIDToFind}});
-        return Distillation.fromSQLObjects(docs);
+        return Distillation.fromObjects(docs);
     }
 
     sumAllHLFByName = async (nameToFind: string): Promise<number> => {
@@ -51,7 +51,7 @@ export class SQLService {
     }
 
     updateDistillation = async (modelObject: Distillation): Promise<Distillation> => {
-        return Distillation.fromSQLObject(await this.db.put(modelObject.toSQLObject()));
+        return Distillation.fromObject(await this.db.put(modelObject.toObject()));
     }
 
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {

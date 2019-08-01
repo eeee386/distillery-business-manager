@@ -29,16 +29,16 @@ export class Distillation {
             this.weightInKilograms = weightInKilograms;
     }
     
-    toSQLObject(): {[key: string]: any} {
+    toObject(): {[key: string]: any} {
         return Object.assign({}, this);
     }
 
-    static fromSQLObject(modelObject: {[key: string]: any}): Distillation {
+    static fromObject(modelObject: {[key: string]: any}): Distillation {
         const {_id, date, address, name, taxID, originID, HLF, weightInKilograms} = modelObject.rows;
         return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id)
     }
 
-    static fromSQLObjects(modelObjects: any[]): Distillation[] {
+    static fromObjects(modelObjects: any[]): Distillation[] {
 
         const models: any[] = modelObjects
         return models.map((item: any) => {
