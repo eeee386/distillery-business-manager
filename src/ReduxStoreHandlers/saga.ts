@@ -9,6 +9,9 @@ const sqlService = new SQLService();
 function* connectSql(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.CONNECTION_STARTED));
     try {
+        // TODO: this is only for clear the database
+        // yield call(sqlService.destroyDataBase);
+        yield call(sqlService.createIndex);
         yield put(ActionFactory(tableTypes.CONNECTION_COMPLETED));
     } catch (error) {
         yield put(ActionFactory(tableTypes.CONNECTION_FAILED, error));
@@ -16,7 +19,6 @@ function* connectSql(): IterableIterator<Effect> {
 }
 
 function* watchConnectSql(): IterableIterator<Effect> {
-        console.log(tableSagaTypes.CONNECT_SQL.typeName);
         yield takeEvery(tableSagaTypes.CONNECT_SQL.typeName, connectSql);
 }
 
@@ -50,7 +52,6 @@ export function* watchFetchDistillation(): IterableIterator<Effect> {
 function* createDistillation(action: Action): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.ADD_NEW_STARTED));
     try {
-        console.log('action: ', action);
         const payloadToSend = !!action.payload && !!tableSagaTypes.ADD_NEW.payloadName && action.payload[tableSagaTypes.ADD_NEW.payloadName];
         const newDist = yield call(() => {
             return sqlService.createNewDistillation(payloadToSend)
@@ -101,7 +102,7 @@ function* searchByName(action: Action): IterableIterator<Effect> {
     const {payload, payloadName} = action;
     yield put(ActionFactory(searchTypes.START_SEARCH_BY_NAME));
     try {
-        const payloadToSend = !!payload && !!payloadName && payload[payloadName]
+        const payloadToSend = !!payload && !!payloadName && payload[payloadName];
         const results = yield call(() => sqlService.findAllByName(payloadToSend));
         yield put(ActionFactory(searchTypes.SEARCH_BY_NAME_COMPLETED, results));
     } catch (error) {
@@ -115,13 +116,13 @@ function* watchSearchByName(): IterableIterator<Effect> {
 
 function* searchByTaxID(action: Action): IterableIterator<Effect> {
     const {payload, payloadName} = action;
-    yield put(ActionFactory(searchTypes.START_SEARCH_BY_NUMBER));
+    yield put(ActionFactory(searchTypes.START_SEARCH_BY_TAXID));
     try {
         const payloadToSend = !!payload && !!payloadName && payload[payloadName]
         const results = yield call(() => sqlService.findAllByTaxID(payloadToSend));
-        yield put(ActionFactory(searchTypes.SEARCH_BY_NUMBER_COMPLETED, results));
+        yield put(ActionFactory(searchTypes.SEARCH_BY_TAXID_COMPLETED, results));
     } catch (error) {
-        yield put(ActionFactory(searchTypes.SEARCH_BY_NUMBER_FAILED, error))
+        yield put(ActionFactory(searchTypes.SEARCH_BY_TAXID_FAILED, error))
     }
 }
 

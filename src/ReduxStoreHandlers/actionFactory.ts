@@ -24,8 +24,6 @@ export class Action {
     }
 }
 
-
-//TODO: Any should be changed.
 export const ActionFactory = (type: Type, typeContent?: any) => {
     const typeName = type.typeName;
     const payloadName = type.payloadName;
@@ -35,4 +33,4 @@ export const ActionFactory = (type: Type, typeContent?: any) => {
         return new Action(typeName, payloadName, payloadContent, loading).createAction();
     }
     return new Action(typeName, payloadName, payloadContent).createAction();
-}
+};

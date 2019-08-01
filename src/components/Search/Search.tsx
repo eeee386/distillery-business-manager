@@ -8,6 +8,7 @@ import SearchByNameForm from './SearchByNameForm/SearchByNameForm'
 import SearchByTaxIDForm from './SearchByTaxIDForm/SearchByTaxIDForm';
 
 class Search extends React.Component<ConnectedComponentProps> {
+
   render() {
     return (
       <div>
@@ -24,8 +25,8 @@ const mapStateToProps = (state: StateProps) => ({
 });
 
 const matchDispatchToProps = (dispatch: React.Dispatch<Action>) => ({
-  searchByName: (name: string) => dispatch(ActionFactory(searchSagaTypes.SEARCH_BY_NAME, name)),
-  searchByTaxID: (taxID: string) => dispatch(ActionFactory(searchSagaTypes.SEARCH_BY_TAXID, taxID)),
+  searchByName: (values: {[key: string]: string}) => dispatch(ActionFactory(searchSagaTypes.SEARCH_BY_NAME, values.name)),
+  searchByTaxID: (values: {[key: string]: string}) => dispatch(ActionFactory(searchSagaTypes.SEARCH_BY_TAXID, values.taxID)),
 });
 
 export default connect(mapStateToProps, matchDispatchToProps)(Search);

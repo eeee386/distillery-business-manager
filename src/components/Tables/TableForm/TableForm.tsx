@@ -2,6 +2,8 @@ import * as React from 'react'
 import {Form, reduxForm} from 'redux-form';
 import './TableForm.scss';
 import {renderFormInput} from '../../UtilComponents/renderFormInput'
+import {renderDatePickerField} from "../../UtilComponents/renderDatePicker";
+import {Validators} from "../../../utils/validators";
 
 const TABLE_FORM_NAME = 'TABLE_FORM';
 
@@ -9,8 +11,8 @@ const TableForm = (props: any) =>  {
     return (
       <Form onSubmit={props.handleSubmit}>
         <div className={"root"}>        
-          {renderFormInput('Dátum', 'date')}
-          {renderFormInput('Név', 'name')}
+          {renderDatePickerField('Dátum', 'date')}
+          {renderFormInput('Név', 'name', [Validators.required])}
           {renderFormInput('Lakcím', 'address')}
           {renderFormInput('AdóSzám', 'taxID')}
           {renderFormInput('Származási Igazolvány Szám', 'originID')}
@@ -20,7 +22,7 @@ const TableForm = (props: any) =>  {
         </div>
       </Form>
     )
-  }
+  };
 
 export default reduxForm({
     form: TABLE_FORM_NAME
