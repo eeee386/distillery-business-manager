@@ -20,6 +20,7 @@ export class SQLService {
 
     findAll = async () => {
         const res = await this.db.find({selector: {}});
+        console.log(res.docs);
         return Distillation.fromObjects(res.docs);
     }
 
@@ -54,11 +55,18 @@ export class SQLService {
 
     createNewDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
         const result = await this.db.post(modelObject);
-        return await this.db.get(result.id)
+        const {docs} = await this.db.get(result.id)
+        console.log(result);
+        console.log(docs);
+        return Distillation.fromObject(docs);
     }
 
-    updateDistillation = async (modelObject: Distillation): Promise<Distillation> => {
-        return Distillation.fromObject(await this.db.put(modelObject.toObject()));
+    updateDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
+        const result = await this.db.put(modelObject)
+        const {docs} = await this.db.get(result.id)
+        console.log(result);
+        console.log(docs);
+        return Distillation.fromObject(docs);
     }
 
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {

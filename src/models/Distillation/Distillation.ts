@@ -1,5 +1,5 @@
 export class Distillation {
-    _id?: string;
+    _id: string;
     date: Date;
     name: string;
     address: string;
@@ -7,6 +7,7 @@ export class Distillation {
     originID: string;
     HLF: number;
     weightInKilograms: number;
+    _rev: string;
 
 
 	constructor(
@@ -17,7 +18,8 @@ export class Distillation {
         originID: string,
         HLF: number,
         weightInKilograms: number,
-        _id?: string,
+        _id: string,
+        _rev: string,
         ) {
             this._id = _id;
             this.date = date;
@@ -27,6 +29,7 @@ export class Distillation {
             this.originID = originID;
             this.HLF = HLF;
             this.weightInKilograms = weightInKilograms;
+            this._rev = _rev;
     }
     
     toObject(): {[key: string]: any} {
@@ -34,16 +37,16 @@ export class Distillation {
     }
 
     static fromObject(modelObject: {[key: string]: any}): Distillation {
-        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms} = modelObject.rows;
-        return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id)
+        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = modelObject.rows;
+        return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev)
     }
 
     static fromObjects(modelObjects: any[]): Distillation[] {
 
         const models: any[] = modelObjects
         return models.map((item: any) => {
-            const {_id, date, address, name, taxID, originID, HLF, weightInKilograms} = item;
-            return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id)
+            const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = item;
+            return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev)
         })
     }
 }

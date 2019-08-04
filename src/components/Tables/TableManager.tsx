@@ -15,11 +15,11 @@ class TableManager extends React.Component<ConnectedComponentProps> {
         props.fetchDistillation();
     }
   render() {
-    const {table, addNewDistillation} = this.props;
+    const {table, addNewDistillation, updateDistillation} = this.props;
     return (
       <div>
-        {isEmpty(table) ? "Nincsenek főzetések": <TableList table={table} />}
-        <TableForm onSubmit={addNewDistillation}/>
+        <TableForm onSubmit={addNewDistillation} form={'addNew'}/>
+        {isEmpty(table) ? "Nincsenek főzetések": <TableList table={table} updateDistillation={updateDistillation} />}
       </div>
     )
   }

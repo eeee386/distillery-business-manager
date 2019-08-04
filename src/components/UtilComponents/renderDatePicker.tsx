@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { Field } from 'redux-form';
 import DatePicker from 'react-datepicker'
-import moment from 'moment'
-
 import 'react-datepicker/dist/react-datepicker.css'
 
 type DatePickerProps = {input: {onChange: Function, value: string}, meta: {touched: boolean, error: boolean}}
@@ -10,7 +8,7 @@ type DatePickerProps = {input: {onChange: Function, value: string}, meta: {touch
 class renderDatePicker extends React.Component<DatePickerProps> {
 
     handleChange = (date: Date) => {
-        this.props.input.onChange(moment(date).format('YYYY-MM-DD'))
+        this.props.input.onChange(date.toISOString().slice(0, 10))
     };
 
     render () {
@@ -23,8 +21,8 @@ class renderDatePicker extends React.Component<DatePickerProps> {
             <div>
                 <DatePicker
                     {...input}
-                    dateFormat="YYYY-MM-DD"
-                    selected={input.value ? moment(input.value, 'YYYY-MM-DD').toDate() : null}
+                    dateFormat="YYYY-MM-dd"
+                    selected={input.value ? new Date(input.value) : null}
                     onChange={this.handleChange}
                 />
                 {touched && error && <span>{error}</span>}
