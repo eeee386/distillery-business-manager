@@ -55,18 +55,15 @@ export class SQLService {
 
     createNewDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
         const result = await this.db.post(modelObject);
-        const {docs} = await this.db.get(result.id)
-        console.log(result);
-        console.log(docs);
-        return Distillation.fromObject(docs);
+        const found = await this.db.get(result.id)
+        return Distillation.fromObject(found);
     }
 
     updateDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
         const result = await this.db.put(modelObject)
-        const {docs} = await this.db.get(result.id)
-        console.log(result);
-        console.log(docs);
-        return Distillation.fromObject(docs);
+        const found = await this.db.get(result.id)
+        console.log(found);
+        return Distillation.fromObject(found);
     }
 
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {

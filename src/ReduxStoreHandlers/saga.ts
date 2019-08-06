@@ -57,6 +57,7 @@ function* createDistillation(action: Action): IterableIterator<Effect> {
             return sqlService.createNewDistillation(payloadToSend)
         });
         yield put(ActionFactory(tableTypes.ADD_NEW_COMPLETED, newDist));
+        yield call(fetchDistillations);
     } catch (error) {
         yield put(ActionFactory(tableTypes.ADD_NEW_FAILED, error));
     }
@@ -72,6 +73,7 @@ function* updateDistillation(action: Action): IterableIterator<Effect> {
         const payloadToSend = !!action.payload && !!tableSagaTypes.UPDATE_ONE.payloadName && action.payload[tableSagaTypes.UPDATE_ONE.payloadName];
         const updatedDistillation = yield call(() => sqlService.updateDistillation(payloadToSend));
         yield put(ActionFactory(tableTypes.UPDATE_ONE_COMPLETED, updatedDistillation));
+        yield call(fetchDistillations);
     } catch (error) {
         yield put(ActionFactory(tableTypes.UPDATE_ONE_FAILED, error));
     }

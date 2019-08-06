@@ -37,7 +37,7 @@ export class Distillation {
     }
 
     static fromObject(modelObject: {[key: string]: any}): Distillation {
-        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = modelObject.rows;
+        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = modelObject;
         return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev)
     }
 

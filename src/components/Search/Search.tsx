@@ -6,6 +6,9 @@ import { Action, ActionFactory } from '../../ReduxStoreHandlers/actionFactory';
 import './Search.scss';
 import SearchByNameForm from './SearchByNameForm/SearchByNameForm'
 import SearchByTaxIDForm from './SearchByTaxIDForm/SearchByTaxIDForm';
+import TableList from '../Tables/TableList/TableList';
+import { Distillation } from '../../models/Distillation/Distillation';
+import { tableSagaTypes } from '../../models/Types/TableTypes/TableTypes';
 
 class Search extends React.Component<ConnectedComponentProps> {
 
@@ -14,6 +17,7 @@ class Search extends React.Component<ConnectedComponentProps> {
       <div>
         <SearchByNameForm onSubmit={this.props.searchByName} />
         <SearchByTaxIDForm onSubmit={this.props.searchByTaxID} />
+        {this.props.results && <TableList updateDistillation={this.props.updateDistillation} table={this.props.results}/>}
       </div>
     );
   }
@@ -27,6 +31,8 @@ const mapStateToProps = (state: StateProps) => ({
 const matchDispatchToProps = (dispatch: React.Dispatch<Action>) => ({
   searchByName: (values: {[key: string]: string}) => dispatch(ActionFactory(searchSagaTypes.SEARCH_BY_NAME, values.name)),
   searchByTaxID: (values: {[key: string]: string}) => dispatch(ActionFactory(searchSagaTypes.SEARCH_BY_TAXID, values.taxID)),
+  updateDistillation: (updatedDist: Distillation) => dispatch(ActionFactory(tableSagaTypes.UPDATE_ONE, updatedDist)),
+  deleteDistillation: (deletedDist: Distillation) => dispatch(ActionFactory(tableSagaTypes.DELETE_ONE, deletedDist)),
 });
 
 export default connect(mapStateToProps, matchDispatchToProps)(Search);

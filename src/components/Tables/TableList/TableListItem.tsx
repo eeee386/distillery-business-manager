@@ -5,7 +5,7 @@ import { nameMap } from './NameMap';
 
 interface ITableListItemProps extends React.Props<any> {
     data: Distillation,
-    updateDistillation: () => Promise<Distillation>,
+    updateDistillation: (data: {[key: string]: string}) => Promise<Distillation>,
 }
 
 export default class TableListItem extends React.Component<ITableListItemProps> {
@@ -20,13 +20,22 @@ export default class TableListItem extends React.Component<ITableListItemProps> 
             return Object.keys(dataObject).map((key: string) => <div key={`${key}-${data._id}`}>{`${nameMap[key]}:${dataObject[key]}`}</div>)
     }
 
+    editModeToggle = () => {
+      this.setState({isEdit: !this.state.isEdit});
+    }
+
+    onSubmitHandler = (data: {[key: string]: string}) => {
+      this.props.updateDistillation(data);
+      this.editModeToggle();
+    }
+
     render() {
-      const {updateDistillation, data} = this.props;
+      const {data} = this.props;
       const {isEdit} = this.state;
       return (
         <div>
-          {isEdit ? <TableForm onSubmit={updateDistillation} data={data} form={`EditTableForm-${data._id}`}/> :  this.renderDistillation(data)}
-          <button onClick={()=> this.setState({isEdit: !isEdit})}>{isEdit ? 'Mégse' : 'Szerkesztés'}</button>
+          {isEdit ? <TableForm onSubmit={this.onSubmitHandler} data={data} form={`EditTableForm-${data._id}`}/> :  this.renderDistillation(data)}
+          <button onClick={()=> this.editModeToggle()}>{isEdit ? 'Mégse' : 'Szerkesztés'}</button>
         </div>
       )
     }
