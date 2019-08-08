@@ -1,9 +1,24 @@
-import { call, put, all, takeEvery, Effect } from 'redux-saga/effects'
+import { call, put, all, takeEvery, Effect, select } from 'redux-saga/effects'
 import { SQLService } from '../SQLService/SQLService';
 import { ActionFactory, Action } from './actionFactory';
-import { searchTypes, searchSagaTypes } from '../models/Types/SearchTypes/SearchTypes';
+import {searchTypes, searchSagaTypes, payloadNames} from '../models/Types/SearchTypes/SearchTypes';
 import { tableTypes, tableSagaTypes } from '../models/Types/TableTypes/TableTypes';
+import {StateProps} from "../models/ConnectTypes/ConnectTypes";
 
+
+// TODO: find a more elegant solution to this.
+const getSearchOrTable = (state: StateProps): Effect => {
+    let result = state.search[payloadNames.SEARCH_RESULT];
+    if(result){
+        if(result.activeName){
+            return put(ActionFactory(searchSagaTypes.SEARCH_BY_NAME, result.activeName))
+        } else {
+            return put(ActionFactory(searchSagaTypes.SEARCH_BY_TAXID, result.activeTaxID))
+        }
+    } else {
+        return call(fetchDistillations)
+    }
+};
 
 const sqlService = new SQLService();
 function* connectSql(): IterableIterator<Effect> {
@@ -73,7 +88,8 @@ function* updateDistillation(action: Action): IterableIterator<Effect> {
         const payloadToSend = !!action.payload && !!tableSagaTypes.UPDATE_ONE.payloadName && action.payload[tableSagaTypes.UPDATE_ONE.payloadName];
         const updatedDistillation = yield call(() => sqlService.updateDistillation(payloadToSend));
         yield put(ActionFactory(tableTypes.UPDATE_ONE_COMPLETED, updatedDistillation));
-        yield call(fetchDistillations);
+        const effect = yield select(getSearchOrTable);
+        yield effect;
     } catch (error) {
         yield put(ActionFactory(tableTypes.UPDATE_ONE_FAILED, error));
     }
@@ -81,7 +97,6 @@ function* updateDistillation(action: Action): IterableIterator<Effect> {
 
 function* watchUpdateDistillation(): IterableIterator<Effect> {
     yield takeEvery(tableSagaTypes.UPDATE_ONE.typeName, updateDistillation);
-
 }
 
 
@@ -91,6 +106,8 @@ function* deleteDistillation(action: Action): IterableIterator<Effect> {
         const payloadToSend = !!action.payload && !!tableSagaTypes.DELETE_ONE.payloadName && action.payload[tableSagaTypes.DELETE_ONE.payloadName];
         const deletedDistillation = yield call(() => sqlService.deleteDistillation(payloadToSend));
         yield put(ActionFactory(tableTypes.DELETE_ONE_COMPLETED, deletedDistillation));
+        const effect = yield select(getSearchOrTable);
+        yield effect;
     } catch (error) {
         yield put(ActionFactory(tableTypes.DELETE_ONE_FAILED, error));
     }
@@ -106,7 +123,7 @@ function* searchByName(action: Action): IterableIterator<Effect> {
     try {
         const payloadToSend = !!payload && !!payloadName && payload[payloadName];
         const results = yield call(() => sqlService.findAllByName(payloadToSend));
-        yield put(ActionFactory(searchTypes.SEARCH_BY_NAME_COMPLETED, results));
+        yield put(ActionFactory(searchTypes.SEARCH_BY_NAME_COMPLETED, {results, activeName: payloadToSend}));
     } catch (error) {
         yield put(ActionFactory(searchTypes.SEARCH_BY_NAME_FAILED, error));
     }
@@ -120,9 +137,9 @@ function* searchByTaxID(action: Action): IterableIterator<Effect> {
     const {payload, payloadName} = action;
     yield put(ActionFactory(searchTypes.START_SEARCH_BY_TAXID));
     try {
-        const payloadToSend = !!payload && !!payloadName && payload[payloadName]
+        const payloadToSend = !!payload && !!payloadName && payload[payloadName];
         const results = yield call(() => sqlService.findAllByTaxID(payloadToSend));
-        yield put(ActionFactory(searchTypes.SEARCH_BY_TAXID_COMPLETED, results));
+        yield put(ActionFactory(searchTypes.SEARCH_BY_TAXID_COMPLETED, {results, activeTaxID: payloadToSend}));
     } catch (error) {
         yield put(ActionFactory(searchTypes.SEARCH_BY_TAXID_FAILED, error))
     }

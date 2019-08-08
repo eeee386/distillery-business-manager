@@ -1,6 +1,6 @@
 import { tableTypes } from '../models/Types/TableTypes/TableTypes';
 import { searchTypes } from '../models/Types/SearchTypes/SearchTypes';
-import { Action } from '../ReduxStoreHandlers/actionFactory';
+import { Action } from './actionFactory';
 import {reducer as form} from 'redux-form';
 import {combineReducers} from 'redux';
 import { ReduxState } from '../models/ConnectTypes/ConnectTypes';
