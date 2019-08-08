@@ -6,7 +6,7 @@ import {renderFormInput} from '../../UtilComponents/renderFormInput'
 const SearchByNameForm = (props: any) => (
   <Form onSubmit={props.handleSubmit}>
     {renderFormInput('Név', 'name')}
-    <button onClick={props.handleSubmit}>Keresés név alapján</button>
+    <button className={'button is-primary'} onClick={props.handleSubmit}>Keresés név alapján</button>
   </Form>
 );
 

@@ -26,7 +26,7 @@ class TableForm extends React.Component<InjectedFormProps<any, {data: Distillati
             {renderFormInput('Származási Igazolvány Szám', 'originID')}
             {renderFormInput('Hektoliterfok', 'HLF')}
             {renderFormInput('Tömeg', 'weightInKilograms')}
-            <button onClick={this.props.handleSubmit}>Küldés</button>
+            <button className={"button is-success"} onClick={this.props.handleSubmit}>Küldés</button>
           </div>
         </Form>
       )

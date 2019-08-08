@@ -19,10 +19,12 @@ class App extends React.Component<ConnectedComponentProps> {
 
   render() {
     return (
-      <React.Fragment>
-        <div>
-          <a href={'/search'}>Keresés</a>
-          <a href={'/'}>Főzetések</a>
+      <div className={'root'}>
+        <div className={'navbar'}>
+          <div className={'container'}>
+            <a className={'.navbar-link link'} href={'/search'}>Keresés</a>
+            <a className={'.navbar-link link'} href={'/'}>Főzetések</a>
+          </div>
         </div>
         <Router>
           <div>
@@ -30,7 +32,7 @@ class App extends React.Component<ConnectedComponentProps> {
             <Route exact path='/search' component={Search} />
           </div>
         </Router>
-      </React.Fragment>
+      </div>
     );
   }
 }

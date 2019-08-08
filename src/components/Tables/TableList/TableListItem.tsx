@@ -4,6 +4,7 @@ import TableForm from '../TableForm/TableForm';
 import { nameMap } from './NameMap';
 import _ from 'lodash';
 import Modal from 'react-modal';
+import './TableListItem.scss';
 
 interface ITableListItemProps extends React.Props<any> {
     data: Distillation,
@@ -51,10 +52,10 @@ export default class TableListItem extends React.Component<ITableListItemProps> 
       const {data} = this.props;
       const {isEdit, isDeleteModalOpen} = this.state;
       return (
-        <div>
+        <div className={'tablelistitem-wrapper'}>
           {isEdit ? <TableForm onSubmit={this.onSubmitHandler} data={data} form={`EditTableForm-${data._id}`}/> :  this.renderDistillation(data)}
-          <button onClick={()=> this.editModeToggle()}>{isEdit ? 'Mégse' : 'Szerkesztés'}</button>
-          <button onClick={()=> this.deleteModalOpen()}>Törlés</button>
+          <button className={'button is-primary'} onClick={()=> this.editModeToggle()}>{isEdit ? 'Mégse' : 'Szerkesztés'}</button>
+          <button className={'button is-danger'} onClick={()=> this.deleteModalOpen()}>Törlés</button>
             <Modal
                 isOpen={isDeleteModalOpen}
                 onRequestClose={this.deleteModalClose}
@@ -62,8 +63,8 @@ export default class TableListItem extends React.Component<ITableListItemProps> 
             >
                 <div>
                     <div>Biztosan törölni akarod?</div>
-                    <button onClick={this.deleteHandler}>Törlés</button>
-                    <button onClick={this.deleteModalClose}>Mégse</button>
+                    <button className={'button is-danger'} onClick={this.deleteHandler}>Törlés</button>
+                    <button className={'button'} onClick={this.deleteModalClose}>Mégse</button>
                 </div>
             </Modal>
         </div>

@@ -6,7 +6,7 @@ import {Form, reduxForm} from 'redux-form'
 const SearchByTaxIDForm = (props: any) => (
       <Form onSubmit={props.handleSubmit}>
         {renderFormInput('AdóSzám', 'taxID')}
-        <button onClick={props.handleSubmit}>Keresés adószám alapján</button>
+        <button className={'button is-primary'} onClick={props.handleSubmit}>Keresés adószám alapján</button>
       </Form>
 );
 
