@@ -1,11 +1,12 @@
 import {Field} from 'redux-form';
 import * as React from 'react'
+import './renderFormInput.scss';
 
 type InputProps = {input: {[key:string]: any}, meta: {touched: boolean, error: boolean}}
 
 const formInput = (props: InputProps) => {
     const {touched, error} = props.meta;
-    return <div><input type='text' {...props.input}/>{touched && error && <span>{error}</span>}</div>
+    return <div><input className="form-input" type='text' {...props.input}/>{touched && error && <span>{error}</span>}</div>
 };
 
 export const renderFormInput = (name: string, formName: string, validators?: Function[]) => {

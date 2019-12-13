@@ -17,7 +17,7 @@ class TableManager extends React.Component<ConnectedComponentProps> {
   render() {
     const {table, addNewDistillation, updateDistillation, deleteDistillation} = this.props;
     return (
-      <div>
+      <div className={'tableWrapper'}>
         <TableForm onSubmit={addNewDistillation} form={'addNew'}/>
         {isEmpty(table) ? "Nincsenek főzetések": <TableList table={table} updateDistillation={updateDistillation} deleteDistillation={deleteDistillation} />}
       </div>

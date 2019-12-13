@@ -27,7 +27,7 @@ class App extends React.Component<ConnectedComponentProps> {
           </div>
         </div>
         <Router>
-          <div>
+          <div className={'routeRoot'} style={{width: '100%'}}>
             <Route exact path='/' component={TableManager} />
             <Route exact path='/search' component={Search} />
           </div>

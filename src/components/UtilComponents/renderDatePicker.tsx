@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Field } from 'redux-form';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import './renderDatePicker.scss';
 
 type DatePickerProps = {input: {onChange: Function, value: string}, meta: {touched: boolean, error: boolean}}
 
