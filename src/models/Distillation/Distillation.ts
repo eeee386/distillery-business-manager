@@ -9,7 +9,6 @@ export class Distillation {
     weightInKilograms: number;
     _rev: string;
 
-
 	constructor(
         date: Date,
         name: string,
@@ -38,15 +37,13 @@ export class Distillation {
 
     static fromObject(modelObject: {[key: string]: any}): Distillation {
         const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = modelObject;
-        return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev)
+        return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev);
     }
 
     static fromObjects(modelObjects: any[]): Distillation[] {
-
         const models: any[] = modelObjects
         return models.map((item: any) => {
-            const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = item;
-            return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev)
-        })
+            return Distillation.fromObject(item);
+        });
     }
 }

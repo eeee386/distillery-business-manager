@@ -4,12 +4,12 @@ import './renderFormInput.scss';
 
 type InputProps = {input: {[key:string]: any}, meta: {touched: boolean, error: boolean}}
 
-const formInput = (props: InputProps) => {
+const formInput = (props: InputProps): React.ReactNode => {
     const {touched, error} = props.meta;
-    return <div><input className="form-input" type='text' {...props.input}/>{touched && error && <span>{error}</span>}</div>
+    return <div className="form-wrapper"><input className={"form-input"} type='text' {...props.input}/>{touched && error && <div className={"form-error"}>{error}</div>}</div>
 };
 
-export const renderFormInput = (name: string, formName: string, validators?: Function[]) => {
+export const renderFormInput = (name: string, formName: string, validators?: Function[]): React.ReactNode => {
     return (
       <div>
         <label>{name}</label>

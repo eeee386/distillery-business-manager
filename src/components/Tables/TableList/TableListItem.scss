@@ -1,4 +1,32 @@
 @import '../../../App';
 
 .tablelistitem-wrapper {
+    width: 360px;
+    .button-wrapper {
+        display: flex;
+        justify-content: space-between;
+    }
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        .data-name {
+            width: 50%;
+        }
+        .data-value {
+            width: 50%;
+            text-align: right;
+        }
+    }
 }
+
+.modal-content-wrapper {
+    .modal-title{
+        margin-bottom: 20px;
+    }
+    .modal-buttons{
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+

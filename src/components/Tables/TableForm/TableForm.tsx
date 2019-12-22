@@ -7,6 +7,8 @@ import {Validators} from "../../../utils/validators";
 import { Distillation } from '../../../models/Distillation/Distillation';
 
 const TABLE_FORM_NAME = 'TABLE_FORM';
+const TAX_VALIDATORS = [Validators.required, Validators.length(10)];
+const NAME_VALIDATORS = [Validators.required];
 
 class TableForm extends React.Component<InjectedFormProps<any, {data: Distillation}> & {data: Distillation}> {
     constructor(props: InjectedFormProps<any, {data: Distillation}> & {data: Distillation}) {
@@ -20,9 +22,9 @@ class TableForm extends React.Component<InjectedFormProps<any, {data: Distillati
         <Form onSubmit={this.props.handleSubmit}>
           <div className={"root"}>        
             {renderDatePickerField('Dátum', 'date')}
-            {renderFormInput('Név', 'name', [Validators.required])}
+            {renderFormInput('Név', 'name', NAME_VALIDATORS)}
             {renderFormInput('Lakcím', 'address')}
-            {renderFormInput('AdóSzám', 'taxID')}
+            {renderFormInput('AdóSzám', 'taxID', TAX_VALIDATORS)}
             {renderFormInput('Származási Igazolvány Szám', 'originID')}
             {renderFormInput('Hektoliterfok', 'HLF')}
             {renderFormInput('Tömeg', 'weightInKilograms')}

@@ -6,6 +6,17 @@ import _ from 'lodash';
 import Modal from 'react-modal';
 import './TableListItem.scss';
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 interface ITableListItemProps extends React.Props<any> {
     data: Distillation,
     updateDistillation: (data: {[key: string]: string}) => Promise<Distillation>,
@@ -20,10 +31,10 @@ export default class TableListItem extends React.Component<ITableListItemProps> 
         isDeleteModalOpen: false,
     };
 
-    renderDistillation = (data: Distillation) => {
+    renderDistillation = (data: Distillation): React.ReactNode => {
             let dataObject = data.toObject();
             dataObject = _.omit(dataObject, ['_id', '_rev']);
-            return Object.keys(dataObject).map((key: string) => <div key={`${key}-${data._id}`}>{`${nameMap[key]}:${dataObject[key]}`}</div>)
+            return Object.keys(dataObject).map((key: string) => <div className={"data-row"} key={`${key}-${data._id}`}><div className={'data-name'}>{nameMap[key]}</div><div className={'data-value'}>{dataObject[key]}</div></div>)
     };
 
     editModeToggle = () => {
@@ -54,17 +65,22 @@ export default class TableListItem extends React.Component<ITableListItemProps> 
       return (
         <div className={'tablelistitem-wrapper'}>
           {isEdit ? <TableForm onSubmit={this.onSubmitHandler} data={data} form={`EditTableForm-${data._id}`}/> :  this.renderDistillation(data)}
-          <button className={'button is-primary'} onClick={()=> this.editModeToggle()}>{isEdit ? 'Mégse' : 'Szerkesztés'}</button>
-          <button className={'button is-danger'} onClick={()=> this.deleteModalOpen()}>Törlés</button>
+          <div className={'button-wrapper'}>          
+            <button className={'button is-primary'} onClick={()=> this.editModeToggle()}>{isEdit ? 'Mégse' : 'Szerkesztés'}</button>
+            <button className={'button is-danger'} onClick={()=> this.deleteModalOpen()}>Törlés</button>
+          </div>
             <Modal
                 isOpen={isDeleteModalOpen}
                 onRequestClose={this.deleteModalClose}
                 contentLabel="Example Modal"
+                style={customStyles}
             >
-                <div>
-                    <div>Biztosan törölni akarod?</div>
-                    <button className={'button is-danger'} onClick={this.deleteHandler}>Törlés</button>
-                    <button className={'button'} onClick={this.deleteModalClose}>Mégse</button>
+                <div className={"modal-content-wrapper"}>
+                    <div className={"modal-title"}>Biztosan törölni akarod?</div>
+                    <div className={"modal-buttons"}>
+                      <button className={'button is-danger'} onClick={this.deleteHandler}>Törlés</button>
+                      <button className={'button'} onClick={this.deleteModalClose}>Mégse</button>
+                    </div>
                 </div>
             </Modal>
         </div>

@@ -1,3 +1,12 @@
-.form-input {
+@import '../../App';
+
+.form-wrapper {
     width:240px;
+    .form-input {
+        width: 100%;
+    }
+    .form-error {
+        font-size: 12px;
+        color: $danger;
+    }
 }

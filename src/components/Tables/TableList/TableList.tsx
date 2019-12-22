@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Distillation } from '../../../models/Distillation/Distillation';
-import TableListItem from './TableListItem';
+import { TableListItemWrapper } from './TableListItemWrapper';
 
 
 interface ITableListProps extends React.Props<any> {
@@ -17,7 +17,7 @@ export default class TableList extends React.Component<ITableListProps> {
       <div>
         {table.map((data: Distillation) => (
             <div key={data._id}>
-                <TableListItem  updateDistillation={updateDistillation} data={data} deleteDistillation={deleteDistillation}/>
+                <TableListItemWrapper updateDistillation={updateDistillation} data={data} deleteDistillation={deleteDistillation}/>
             </div>))}
       </div>
     )

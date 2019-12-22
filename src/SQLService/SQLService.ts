@@ -11,7 +11,6 @@ export class SQLService {
         this.db = new PouchDB('Distillation');
     }
 
-
     createIndex = async () => {
         return await this.db.createIndex({
             index: {fields: ['name', 'taxID']}
@@ -72,5 +71,5 @@ export class SQLService {
 
     destroyDataBase = async (): Promise<any> => {
         await this.db.destroy('Distillation')
-    }
+    };
 }

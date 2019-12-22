@@ -24,8 +24,6 @@ const sqlService = new SQLService();
 function* connectSql(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.CONNECTION_STARTED));
     try {
-        // TODO: this is only for clear the database
-        // yield call(sqlService.destroyDataBase);
         yield call(sqlService.createIndex);
         yield put(ActionFactory(tableTypes.CONNECTION_COMPLETED));
     } catch (error) {
