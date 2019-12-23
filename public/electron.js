@@ -12,7 +12,6 @@ function createWindow() {
     mainWindow.loadURL(
         isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
     );
-    console.log(electron.ipcRenderer);
 
     mainWindow.on("closed", async () => {
         /*PouchDB.plugin(find);
