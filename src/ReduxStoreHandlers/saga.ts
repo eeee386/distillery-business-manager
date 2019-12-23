@@ -5,7 +5,6 @@ import {searchTypes, searchSagaTypes, payloadNames} from '../models/Types/Search
 import { tableTypes, tableSagaTypes } from '../models/Types/TableTypes/TableTypes';
 import {StateProps} from "../models/ConnectTypes/ConnectTypes";
 
-
 // TODO: find a more elegant solution to this.
 const getSearchOrTable = (state: StateProps): Effect => {
     let result = state.search[payloadNames.SEARCH_RESULT];

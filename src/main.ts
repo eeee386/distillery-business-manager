@@ -1,5 +1,10 @@
 // Modules to control application life and create native browser window
 import {app, BrowserWindow} from 'electron';
+import { SQLService } from './SQLService/SQLService';
+import { Distillation } from './models/Distillation/Distillation';
+const fs = require('fs');
+const path = require("path");
+const isDev = require("electron-is-dev");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -10,13 +15,20 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
   // and load the index.html of the app.
-  mainWindow.loadURL('http://localhost:3000')
+  mainWindow.loadURL(
+    isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
+);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', async function () {
+    const sqlService = new SQLService();
+    const dataArray = await sqlService.findAll();
+    const data = dataArray.map((item) => item.toObject());
+    fs.writeFileSync('./data.json', data);
+    alert('did it work?');
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.

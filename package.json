@@ -2,6 +2,7 @@
   "name": "distillery-business-manager",
   "version": "0.1.0",
   "private": true,
+  "main": "public/electron.js",
   "dependencies": {
     "@types/electron": "^1.6.10",
     "@types/jest": "24.0.15",
@@ -19,7 +20,11 @@
     "@types/redux-logger": "^3.0.7",
     "@types/redux-saga": "^0.10.5",
     "bulma": "^0.7.5",
-    "electron": "^5.0.8",
+    "concurrently": "^5.0.2",
+    "cross-env": "^6.0.3",
+    "electron": "^7.1.7",
+    "electron-builder": "^21.2.0",
+    "electron-is-dev": "^1.1.0",
     "jsstore": "^3.3.0",
     "lodash": "^4.17.15",
     "node-sass": "^4.12.0",
@@ -35,13 +40,18 @@
     "redux-form": "^8.2.5",
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.0.5",
-    "typescript": "3.5.2"
+    "typescript": "3.5.2",
+    "wait-on": "^3.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test --env=jsdom",
+    "react-eject": "react-scripts eject",
+    "electron-build": "electron-builder",
+    "release": "yarn react-build && electron-builder --publish=always",
+    "build": "yarn react-build && yarn electron-build",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {
     "extends": "react-app"
