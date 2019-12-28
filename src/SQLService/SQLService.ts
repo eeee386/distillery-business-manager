@@ -4,7 +4,7 @@ import find from 'pouchdb-find';
  
 export class SQLService {
 
-    db: any;
+    db: PouchDB.Database;
 
     constructor(){
         PouchDB.plugin(find);
@@ -19,7 +19,8 @@ export class SQLService {
 
     findAll = async () => {
         const res = await this.db.find({selector: {}});
-        return Distillation.fromObjects(res.docs);
+        const data = Distillation.fromObjects(res.docs);
+        return data;
     };
 
     findAllByName = async (nameToFind: string): Promise<Distillation[]> => {
@@ -57,19 +58,21 @@ export class SQLService {
         return Distillation.fromObject(found);
     };
 
+    bulkAddDistillations = async (modelObjects: Array<{[key: string]: any}>): Promise<Distillation[]> => {
+        console.log('this is called');
+        const res = await this.db.bulkDocs(modelObjects);
+        console.log(res);
+        return this.findAll();
+    }
+
     updateDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
         const result = await this.db.put(modelObject);
         const found = await this.db.get(result.id);
-        console.log(found);
         return Distillation.fromObject(found);
     };
 
     deleteDistillation = async (modelObject: Distillation): Promise<any> => {
         const doc = await this.db.get(modelObject._id);
         return await this.db.remove(doc);
-    };
-
-    destroyDataBase = async (): Promise<any> => {
-        await this.db.destroy('Distillation')
     };
 }

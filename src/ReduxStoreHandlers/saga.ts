@@ -79,6 +79,26 @@ function* watchCreateDistillation(): IterableIterator<Effect> {
     yield takeEvery(tableSagaTypes.ADD_NEW.typeName, createDistillation);
 }
 
+function* addBulkDistillations(action: Action): IterableIterator<Effect> {
+    yield put(ActionFactory(tableTypes.ADD_BULK_STARTED));
+    console.log('action: ', action);
+    try {
+        const payloadToSend = !!action.payload && !!tableSagaTypes.ADD_BULK.payloadName && action.payload[tableSagaTypes.ADD_BULK.payloadName];
+        const newData = yield call(() => {
+            return sqlService.bulkAddDistillations(payloadToSend)
+        });
+        yield put(ActionFactory(tableTypes.ADD_BULK_COMPLETED, newData));
+        // Is this call needed or just send back bulk?
+        yield call(fetchDistillations);
+    } catch (error) {
+        yield put(ActionFactory(tableTypes.ADD_BULK_FAILED, error));
+    }
+}
+
+function* watchAddBulkDistillations(): IterableIterator<Effect> {
+    yield takeEvery(tableSagaTypes.ADD_BULK.typeName, addBulkDistillations);
+}
+
 function* updateDistillation(action: Action): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.UPDATE_ONE_STARTED));
     try {
@@ -156,5 +176,6 @@ export function* watcherSagas(): IterableIterator<Effect> {
         watchDeleteDistillation(),
         watchSearchByName(),
         watchSearchByTaxID(),
+        watchAddBulkDistillations(),
     ])
 }

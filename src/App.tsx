@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import TableManager from './components/Tables/TableManager';
 import Search from './components/Search/Search';
 import { ActionFactory, Action } from './ReduxStoreHandlers/actionFactory';
 import { tableSagaTypes } from './models/Types/TableTypes/TableTypes';
 import { ConnectedComponentProps } from './models/ConnectTypes/ConnectTypes';
+import StorageHandler from './StorageHandler/StorageHandler';
 
 class App extends React.Component<ConnectedComponentProps> {
   constructor(props: ConnectedComponentProps) {
@@ -19,20 +20,22 @@ class App extends React.Component<ConnectedComponentProps> {
 
   render() {
     return (
-      <div className={'root'}>
-        <div className={'navbar'}>
-          <div className={'container'}>
-            <a className={'.navbar-link link'} href={'/search'}>Keresés</a>
-            <a className={'.navbar-link link'} href={'/'}>Főzetések</a>
+      <Router>
+        <div className={'root'}>
+          <div className={'navbar'}>
+            <div className={'container'}>
+              <Link className={'.navbar-link link'} to={'/search'}>Keresés</Link>
+              <Link className={'.navbar-link link'} to={'/'}>Főzetések</Link>
+              <Link className={'.navbar-link link'} to={'/store'}>Tartós tár</Link>
+            </div>
           </div>
+            <div className={'routeRoot'} style={{width: '100%'}}>
+              <Route exact path='/' component={TableManager} />
+              <Route exact path='/search' component={Search} />
+              <Route exact path='/store' component={StorageHandler} />
+            </div>
         </div>
-        <Router>
-          <div className={'routeRoot'} style={{width: '100%'}}>
-            <Route exact path='/' component={TableManager} />
-            <Route exact path='/search' component={Search} />
-          </div>
-        </Router>
-      </div>
+      </Router>
     );
   }
 }

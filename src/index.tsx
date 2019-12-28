@@ -12,6 +12,9 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware, logger));
 sagaMiddleware.run(watcherSagas);
 
+//@ts-ignore
+window.store = store
+
 ReactDOM.render(
 <Provider store={store}>
     <App />

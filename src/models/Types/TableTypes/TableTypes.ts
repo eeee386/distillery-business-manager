@@ -7,6 +7,7 @@ export enum payloadNames {
     TABLE_EXCEPTION = 'tableException',
     TABLES = 'tables',
     ADDED_TO_TABLE = 'addedToTable',
+    ADDED_BULK_TO_TABLE = 'addedBulkToTable',
     DELETED_FROM_TABLE = 'deletedFromTable',
     UPDATED_IN_TABLE = 'updatedInTable',
 }
@@ -18,6 +19,7 @@ export const tableSagaTypes: {[key: string]: SagaType} = {
     DELETE_ONE: new SagaType('DELETE_ONE', 'deletableDistillation'),
     UPDATE_ONE: new SagaType('UPDATE_ONE', 'updatableDistillation'),
     DISCONNECT_SQL: new SagaType('DISCONNECT_SQL'),
+    ADD_BULK: new SagaType('ADD_BULK', 'addableBulkDistillations'),
 }
 
 export const tableTypes: {[key: string]: ReduxType} = {
@@ -27,6 +29,9 @@ export const tableTypes: {[key: string]: ReduxType} = {
     ADD_NEW_STARTED: new ReduxType('ADD_NEW_STARTED', AsyncTypes.startType, payloadNames.TABLE_LOADING),
     ADD_NEW_FAILED: new ReduxType('ADD_NEW_FAILED', AsyncTypes.failType, payloadNames.TABLE_EXCEPTION),
     ADD_NEW_COMPLETED: new ReduxType('ADD_NEW_COMPLETED', AsyncTypes.completeType, payloadNames.ADDED_TO_TABLE),
+    ADD_BULK_STARTED: new ReduxType('ADD_BULK_STARTED', AsyncTypes.startType, payloadNames.TABLE_LOADING),
+    ADD_BULK_FAILED: new ReduxType('ADD_BULK_FAILED', AsyncTypes.failType, payloadNames.TABLE_EXCEPTION),
+    ADD_BULK_COMPLETED: new ReduxType('ADD_BULK_COMPLETED', AsyncTypes.completeType, payloadNames.ADDED_BULK_TO_TABLE),
     DELETE_ONE_STARTED: new ReduxType('DELETE_ONE_STARTED', AsyncTypes.startType, payloadNames.TABLE_LOADING ),
     DELETE_ONE_FAILED: new ReduxType('DELETE_ONE_FAILED', AsyncTypes.failType, payloadNames.TABLE_EXCEPTION ),
     DELETE_ONE_COMPLETED: new ReduxType('DELETE_ONE_COMPLETED', AsyncTypes.completeType, payloadNames.DELETED_FROM_TABLE),
