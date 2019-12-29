@@ -23,7 +23,7 @@ const sqlService = new SQLService();
 function* connectSql(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.CONNECTION_STARTED));
     try {
-        yield call(sqlService.createIndex);
+        yield call(sqlService.createDB);
         yield put(ActionFactory(tableTypes.CONNECTION_COMPLETED));
     } catch (error) {
         yield put(ActionFactory(tableTypes.CONNECTION_FAILED, error));
