@@ -1,7 +1,7 @@
 import {Distillation} from '../models/Distillation/Distillation'
 import PouchDB from 'pouchdb-browser';
 import find from 'pouchdb-find';
- 
+
 export class SQLService {
 
     db: any;
@@ -17,7 +17,7 @@ export class SQLService {
         });
     };
 
-    findAll = async () => {
+    findAll = async (): Promise<Distillation[]> => {
         const res = await this.db.find({selector: {}});
         return Distillation.fromObjects(res.docs);
     };
@@ -60,7 +60,6 @@ export class SQLService {
     updateDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
         const result = await this.db.put(modelObject);
         const found = await this.db.get(result.id);
-        console.log(found);
         return Distillation.fromObject(found);
     };
 
