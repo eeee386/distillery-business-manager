@@ -47,7 +47,6 @@ class MonthlySum extends React.Component<ConnectedComponentProps & MonthlySumPro
                     mapNumber[year][getMonth(dist)] = 0
                 }
                 mapNumber[year][getMonth(dist)] += prop === SumByTypes.WEIGHT ? stringToFloat(dist.weightInKilograms) : stringToFloat(dist.HLF);
-                mapNumber[year][getMonth(dist)] = truncFloat(mapNumber[year][getMonth(dist)]);
             })
         })
         return mapNumber;
@@ -64,7 +63,7 @@ class MonthlySum extends React.Component<ConnectedComponentProps & MonthlySumPro
                 <div className={"map-month-data-wrapper"}>{Object.keys(map[year]).map(month =>
                     <div>
                         <span>{month} : </span>
-                        <span>{map[year][month]}</span>
+                        <span>{truncFloat(map[year][month])}</span>
                     </div>
                 )}</div>
             </div>)}</div>}</Fragment>

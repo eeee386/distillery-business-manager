@@ -16,7 +16,7 @@ interface ITableListProps {
 export default class TableList extends React.Component<ITableListProps> {
     state = {
         sortBy: SortByTypes.DATE,
-        onlyThisYear: false,
+        onlyThisYear: true,
         sortDirections: SortDirections.ASC,
     }
 

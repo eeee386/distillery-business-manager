@@ -1,10 +1,9 @@
-import {Distillation} from '../models/Distillation/Distillation'
+import { Distillation } from '../models/Distillation/Distillation'
 import PouchDB from 'pouchdb-browser';
 import find from 'pouchdb-find';
 import _ from 'lodash';
 const fs = require('fs');
-const nw = require('nw.gui')
-
+const nw = require('nw.gui');
 
 export class SQLService {
 

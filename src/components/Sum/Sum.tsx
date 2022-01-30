@@ -10,6 +10,7 @@ import SumWeightByTaxIDForm from "./SumByTaxIDForm/SumWeightByTaxIDForm";
 import SumHLFByTaxIDForm from "./SumByTaxIDForm/SumHLFByTaxIDForm";
 import _ from 'lodash';
 import { Fragment } from 'react';
+import { truncFloat } from '../../utils/utils';
 
 class Sum extends React.Component<ConnectedComponentProps> {
 
@@ -18,7 +19,7 @@ class Sum extends React.Component<ConnectedComponentProps> {
             const {activeName, activeTaxID, result} = this.props.result;
             if(!_.isEmpty(result)){
                 return <Fragment>{Object.keys(this.props.result.result).map((key: string) => <div className={"sum-data"} key={`${key}-${this.props.result.result[key]}`}>
-                    <span>Eredmény: </span><span>{this.props.result.result[key]}</span></div>)}</Fragment>
+                    <span>Eredmény: </span><span>{truncFloat(this.props.result.result[key])}</span></div>)}</Fragment>
             } else {
                 return <div>Nincs találat erre a keresésre: {activeName ? `Név: ${activeName}` : `AdóSzám: ${activeTaxID}`}</div>
             }
