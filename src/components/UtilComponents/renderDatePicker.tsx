@@ -8,10 +8,6 @@ interface DatePickerProps {input: {onChange: Function, value: string}, meta: {to
 
 class renderDatePicker extends React.Component<DatePickerProps> {
 
-    componentDidUpdate(prevProps: Readonly<DatePickerProps>, prevState: Readonly<{}>, snapshot?: any) {
-        console.log(this.props.input.value === prevProps.input.value);
-    }
-
     handleChange = (date: Date) => {
         this.props.input.onChange(date.toLocaleDateString('hu-hu'));
     };
