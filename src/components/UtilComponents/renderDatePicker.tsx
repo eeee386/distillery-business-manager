@@ -3,7 +3,6 @@ import { Field } from 'redux-form';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import './renderDatePicker.scss';
-import {DateTime} from "luxon";
 
 interface DatePickerProps {input: {onChange: Function, value: string}, meta: {touched: boolean, error: boolean}}
 
