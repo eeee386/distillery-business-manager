@@ -2,8 +2,8 @@ import { Distillation } from '../models/Distillation/Distillation'
 import PouchDB from 'pouchdb-browser';
 import find from 'pouchdb-find';
 import _ from 'lodash';
-const fs = require('fs');
-const nw = require('nw.gui');
+//const fs = require('fs');
+//const nw = require('nw.gui');
 
 export class SQLService {
 
@@ -92,11 +92,12 @@ export class SQLService {
         await this.db.destroy();
     }
 
+    // @ts-ignore
     static restoreData(): Distillation[] | undefined {
-        return Distillation.fromObjects(JSON.parse(fs.readFileSync(`${nw.App.dataPath}/data.json`)));
+        //return Distillation.fromObjects(JSON.parse(fs.readFileSync(`${nw.App.dataPath}/data.json`)));
     }
 
     static saveDataToFile(distillations: Distillation[] | undefined): void {
-        fs.writeFileSync(`${nw.App.dataPath}/data.json`, JSON.stringify(distillations));
+        //fs.writeFileSync(`${nw.App.dataPath}/data.json`, JSON.stringify(distillations));
     }
 }

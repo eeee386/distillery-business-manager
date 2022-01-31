@@ -3,13 +3,18 @@ import { Field } from 'redux-form';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import './renderDatePicker.scss';
+import {DateTime} from "luxon";
 
 interface DatePickerProps {input: {onChange: Function, value: string}, meta: {touched: boolean, error: boolean}}
 
 class renderDatePicker extends React.Component<DatePickerProps> {
 
+    componentDidUpdate(prevProps: Readonly<DatePickerProps>, prevState: Readonly<{}>, snapshot?: any) {
+        console.log(this.props.input.value === prevProps.input.value);
+    }
+
     handleChange = (date: Date) => {
-        this.props.input.onChange(date.toLocaleDateString());
+        this.props.input.onChange(date.toLocaleDateString('hu-hu'));
     };
 
     render () {
@@ -17,7 +22,7 @@ class renderDatePicker extends React.Component<DatePickerProps> {
             input,
             meta: {touched, error}
         } = this.props;
-
+        console.log(input.value);
         return (
             <div>
                 <DatePicker
