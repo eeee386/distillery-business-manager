@@ -20,7 +20,7 @@
     "@types/redux-logger": "3.0.9",
     "@types/redux-saga": "0.10.5",
     "bulma": "0.9.3",
-    "lodash": "4.17.21",
+    "lodash": "4.18.1",
     "luxon": "2.3.0",
     "nw-react-scripts": "4.0.4",
     "pouchdb-browser": "7.2.2",
